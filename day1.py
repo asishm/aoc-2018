@@ -5,7 +5,7 @@ def prob1(s):
     return sum(s)
 
 def prob2(s):
-    seen = set()
+    seen = set([0])
     start = 0
     for val in cycle(s):
         start += val
@@ -14,6 +14,6 @@ def prob2(s):
         seen.add(start)
 
 if __name__ == "__main__":
-    inp = list(map(float, sys.stdin.read().splitlines()))
+    inp = list(map(int, sys.stdin.read().splitlines()))
     print(prob1(inp))
     print(prob2(inp))
