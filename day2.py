@@ -1,7 +1,10 @@
 from itertools import combinations
 from collections import Counter
 import sys
-import Levenshtein as lv
+# import Levenshtein as lv
+
+def _cmp(a, b):
+    return sum(m != n for m,n in zip(a, b))
 
 def prob1(s):
     counters = [set(Counter(c).values()) for c in s]
@@ -11,7 +14,8 @@ def prob1(s):
 
 def prob2(s):
     for a, b in combinations(s, 2):
-        dist = lv.distance(a, b)
+        dist = _cmp(a, b)
+        # dist = lv.distance(a, b)
         if dist == 1:
             out = "".join(c1 for c1, c2 in zip(a, b) if c1 == c2)
             return out
