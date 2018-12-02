@@ -1,26 +1,20 @@
-from itertools import cycle
+from itertools import combinations
 from collections import Counter
 import sys
 import Levenshtein as lv
 
 def prob1(s):
-    twos = 0
-    threes = 0
-    for c in s:
-        counter = set(Counter(c).values())
-        if 2 in counter:
-            twos += 1
-        if 3 in counter:
-            threes += 1
+    counters = [set(Counter(c).values()) for c in s]
+    twos = sum(2 in k for k in counters)
+    threes = sum(3 in k for k in counters)
     return twos * threes
 
 def prob2(s):
-    for i, c in enumerate(s):
-        for j in range(i+1, len(s)):
-            dist = lv.distance(c, s[j])
-            if dist == 1:
-                out = "".join([c1 for c1, c2 in zip(c, s[j]) if c1 == c2])
-                return out
+    for a, b in combinations(s, 2):
+        dist = lv.distance(a, b)
+        if dist == 1:
+            out = "".join(c1 for c1, c2 in zip(a, b) if c1 == c2)
+            return out
 
 
 if __name__ == "__main__":
