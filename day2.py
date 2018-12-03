@@ -22,7 +22,6 @@ def prob2(s):
 
 
 if __name__ == "__main__":
-
     inp = sys.stdin.read().splitlines()
     print(prob1(inp))
     print(prob2(inp))
