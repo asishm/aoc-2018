@@ -4,7 +4,7 @@ from collections import defaultdict
 import pandas as pd
 
 def parse(line):
-    return (int(k) for k in re.findall(r'\d+', line))
+    return [int(k) for k in re.findall(r'\d+', line)]
 
 def prob1(s):
     lines = [parse(line) for line in s]
@@ -14,7 +14,22 @@ def prob1(s):
         for i in range(left, left + width):
             for j in range(top, top + height):
                 grid[(i, j)] = grid.get((i, j), 0) + 1
-    return sum(x >= 2 for x in grid.values())
+    return grid, lines, sum(x >= 2 for x in grid.values())
+
+def alternate_prob2(s):
+    grid, lines, _ = prob1(s)
+    for _id, left, top, width, height in lines:
+        valid = True
+        for i in range(left, left + width):
+            for j in range(top, top + height):
+                if grid[(i, j)] > 1:
+                    valid = False
+                    break
+            if not valid:
+                break
+        else:
+            return(_id)
+            
 
 def prob2(s):
     lines = (parse(line) for line in s)
@@ -41,4 +56,7 @@ def prob2(s):
 if __name__ == "__main__":
     inp = sys.stdin.read().splitlines()
     # print(prob1(inp))
-    print(prob2(inp))
+    prob2(inp)
+
+    print(prob1(inp)[2])
+    print(alternate_prob2(inp))
