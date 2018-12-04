@@ -23,9 +23,9 @@ def prob1(s):
         elif 'wakes up' in line:
             slept = int(re.findall(r'\d+', line)[-1])
             if prev not in data:
-                data[prev] = [slept - prev_slept + 1, [0] * 60]
+                data[prev] = [slept - prev_slept, [0] * 60]
             else:
-                data[prev][0] += (slept - prev_slept + 1)
+                data[prev][0] += (slept - prev_slept)
             for i in range(prev_slept, slept):
                 data[prev][1][i] += 1
             # print(line, prev, slept, prev_slept)
