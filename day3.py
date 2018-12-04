@@ -1,23 +1,20 @@
 import sys
 import re
 from collections import defaultdict
-import pandas as pd
+# import pandas as pd
 
 def parse(line):
     return [int(k) for k in re.findall(r'\d+', line)]
 
-def prob1(s):
-    lines = [parse(line) for line in s]
-
+def prob1(lines):
     grid = {}
     for _id, left, top, width, height in lines:
         for i in range(left, left + width):
             for j in range(top, top + height):
                 grid[(i, j)] = grid.get((i, j), 0) + 1
-    return grid, lines, sum(x >= 2 for x in grid.values())
+    return grid, sum(x >= 2 for x in grid.values())
 
-def alternate_prob2(s):
-    grid, lines, _ = prob1(s)
+def alternate_prob2(lines, grid):
     for _id, left, top, width, height in lines:
         valid = True
         for i in range(left, left + width):
@@ -31,9 +28,7 @@ def alternate_prob2(s):
             return(_id)
             
 
-def prob2(s):
-    lines = (parse(line) for line in s)
-
+def prob2(lines):
     data = []
     for _id, left, top, width, height in lines:
         for i in range(left, left + width):
@@ -51,12 +46,39 @@ def prob2(s):
     print(group[group].index[0])
     # return vals
 
-                
+def solve(lines):
+    from time import time
+
+    start = time()
+
+    grid = defaultdict(int)
+    for _id, left, top, width, height in lines:
+        for i in range(left, left + width):
+            for j in range(top, top + height):
+                grid[(i, j)] = grid.get((i, j), 0) + 1
+
+    print(sum(x >= 2 for x in grid.values()))
+    p1 = time()
+    print(p1 - start)
+    
+    for _id, left, top, width, height in lines:
+        valid = True
+        for i in range(left, left + width):
+            for j in range(top, top + height):
+                if grid[(i, j)] > 1:
+                    valid = False
+                    break
+            if not valid:
+                break
+        else:
+            print(_id)
+            break
+    print(time() - p1)
 
 if __name__ == "__main__":
     inp = sys.stdin.read().splitlines()
-    # print(prob1(inp))
-    prob2(inp)
 
-    print(prob1(inp)[2])
-    print(alternate_prob2(inp))
+    lines = [parse(line) for line in inp]
+    grid, out = prob1(lines)
+    print(out)
+    print(alternate_prob2(lines, grid))
