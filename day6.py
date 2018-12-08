@@ -4,15 +4,11 @@ import sys
 import re
 from collections import defaultdict, Counter
 import string
-# import pandas as pd
-from numba import jit
-# import networkx as nx
 print('imports done')
 
 def parse(line):
     pass
 
-# @jit
 def prob1(df, lim=10000):
     xs = [k[0] for k in df]
     ys = [k[1] for k in df]
@@ -55,8 +51,8 @@ def prob1(df, lim=10000):
         return out, region
             # print(i, j, closest_point)
     # print(dict(out))
-    out1, r1 = solve(-10, right+10, -10, bot+10, True)
-    out2, r2 = solve(-100, right+100, -100, bot+100)
+    out1, r1 = solve(left, right, top, bot, True)
+    out2, r2 = solve(left-10, right+10, top-10, bot+10)
 
     max_ = float('-inf')
     for k in set(out1.keys()).union(set(out2.keys())):
@@ -74,7 +70,7 @@ def prob1(df, lim=10000):
     # print(r2[(2,5)], r1[(2,5)])
     return max_, c
 
-def prob2(line):
+def prob2(line):    
     pass
 
 if __name__ == "__main__":
