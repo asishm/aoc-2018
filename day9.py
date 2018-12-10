@@ -9,7 +9,8 @@ def f(nplayer, last, debug=False):
     circle = blist([])
     current = None
     current_id = None
-    for i, player in tqdm(zip(range(last+1), cycle(range(nplayer)))):
+    dataset = []
+    for i, player in zip(range(last+1), cycle(range(nplayer))):
         if debug: print(circle, current, current_id)
         if not circle:
             circle.append(i)
@@ -24,6 +25,7 @@ def f(nplayer, last, debug=False):
         if i % 23 == 0:
             players[player] += i
             current = circle[current_id - 6]
+            dataset.append([i, circle[current_id - 7]])
             players[player] += circle.pop(current_id - 7)
             current_id = current_id - 7 if current_id - 7 >= 0 else (current_id - 6) % len(circle)
         else:
@@ -34,10 +36,10 @@ def f(nplayer, last, debug=False):
             else:
                 circle.insert(new_id, i)
                 current_id = new_id
-    return max(players.values())
+    return max(players.values()), dataset
 
 if __name__ == "__main__":
     data = sys.stdin.read().strip().split()
     players, point = map(int, [data[0], data[-2]])
-    print(f(players, point))
-    print(f(players, point * 100))
+    print(f(players, point)[0])
+    print(f(players, point * 100)[0])
