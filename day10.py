@@ -34,4 +34,5 @@ if __name__ == "__main__":
     data = [list(map(int, re.findall(r'-?\d+', line))) for line in sys.stdin.read().splitlines()]
     solved = solve(np.array(data), np.arange(20000))
     to_print = get_at_time_t(np.array(data), solved[0])
-    # print("Part 2: ", solved[1])
+    print(to_print, '\n======\n')
+    print("Part 2: ", solved[0])
