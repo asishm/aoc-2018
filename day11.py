@@ -1,6 +1,7 @@
 from itertools import product
 import numpy as np
 import pandas as pd
+from numba import jit
 
 def gen_np(xsize, ysize, special_inp, debug=False):
     grid = pd.DataFrame(list(product(range(1,xsize+1), range(1,ysize+1))), columns=['x', 'y'])
