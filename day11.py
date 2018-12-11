@@ -6,27 +6,26 @@ from numba import jit
 def gen_np(xsize, ysize, special_inp, debug=False):
     grid = pd.DataFrame(list(product(range(1,xsize+1), range(1,ysize+1))), columns=['x', 'y'])
     grid['power'] = (((grid.x + 10 )*grid.y + special_inp) * (grid.x + 10 ) // 100) % 10 - 5
-    fin = grid.pivot_table(index='x', columns='y')
-    if debug:
-        print(fin)
+    fin = grid.pivot_table(index='x', columns='y').cumsum(axis=1).cumsum()
     return fin.values
     
 @jit(nopython=True)
-def f(fin, kern_min, kern_max):
+def solve(fin, min_kern, max_kern):
     x,y,g = 0,0,0
     maxv = fin[0][0]
-    for kern in range(kern_min,kern_max):
-        for i in range(fin.shape[0]):
-            for j in range(fin.shape[1]):
-                s = fin[i:i+kern, j:j+kern].sum()
+    n = len(fin)
+    for kern in range(min_kern,max_kern):
+        for i in range(n - kern):
+            for j in range(n - kern):
+                s = fin[i][j] + fin[i+kern][j+kern] - fin[i][j+kern] - fin[i+kern][j]
                 if s > maxv:
                     maxv = s
-                    x = i+1
-                    y = j+1
+                    x = i
+                    y = j
                     g = kern
-    return maxv, x, y, g
+    return maxv, x+1, y+1, g
 
 if __name__ == "__main__":
     v1 = gen_np(300, 300, 2187)
-    print(f(v1,3,4))
-    print(f(v1, 1, 21))
+    print(solve(v1, 3, 4))
+    print(solve(v1, 1, 301))
