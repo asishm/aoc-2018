@@ -1,5 +1,4 @@
-from tqdm import tqdm
-from itertools import cycle
+from numba import jit
 
 class Elf:
     def __init__(self, pos, score):
@@ -25,14 +24,12 @@ def solve(n):
         e2.score = scores[e2.pos]
     return int(''.join(map(str, scores[n:n+10])))
 
+@jit(nopython=True)
 def solve2(n):
     p1, s1 = 0,3
     p2, s2 = 1,7
-
     scores = [3,7]
     score_len = 2
-    nstr = ''.join(map(str, n))
-
     while True:
         nexts = s1 + s2
         if nexts >= 10:
